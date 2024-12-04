@@ -1,47 +1,81 @@
-// Run after all content (including iframes) has loaded
+// Når siden er lastet inn
 window.addEventListener('load', function () {
-    // Remove preloader
+    // Fjern preloader
     const preloader = document.getElementById('preloader');
     if (preloader) {
         preloader.style.display = 'none';
         document.body.classList.add('loaded');
     }
 
-    // Handle scrolling to the anchor if there is a hash in the URL
+    // Håndter hash i URL-en
     if (window.location.hash) {
         const element = document.querySelector(window.location.hash);
         if (element) {
             setTimeout(() => {
                 element.scrollIntoView({ behavior: 'smooth' });
-            }, 300); // Adjust the delay if necessary
+            }, 300); // Juster forsinkelsen om nødvendig
         }
     } else {
-        // Scroll to top if no hash is present
+        // Scroll til toppen hvis ingen hash er til stede
         window.scrollTo(0, 0);
     }
 });
 
-// Ensure DOM content is ready before checking for hashes
+// Når DOM-innholdet er klart
 document.addEventListener('DOMContentLoaded', function () {
-    // Check if there's a hash in the URL and scroll immediately
-    if (window.location.hash) {
-        const element = document.querySelector(window.location.hash);
-        if (element) {
-            // Scroll without delay for immediate navigation
-            element.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            console.warn('Anchor element not found:', window.location.hash);
-        }
+    // Hent tekstfeltet for brukerinput
+    const userInputField = document.getElementById("user-input");
+    if (userInputField) {
+        // Lytt etter Enter-tasten
+        userInputField.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Forhindre standard oppførsel
+                sendMessage(); // Kall sendMessage-funksjonen
+            }
+        });
     }
 });
 
-function onIframeLoad() {
-    // Forsink rulling til toppen
-    setTimeout(function() {
-        window.scrollTo(0, 0); // Tving rullingen til toppen
-    }, 100); // 1 sekund forsinkelse
+// Funksjonen som sender meldinger
+async function sendMessage() {
+    const inputElement = document.getElementById("user-input");
+    const message = inputElement.value;
+
+    if (message.trim() === "") return; // Ikke send tomme meldinger
+
+    // Vis brukerens melding
+    appendMessage("Du: " + message);
+
+    // Tøm inputfeltet
+    inputElement.value = "";
+
+    try {
+        // Send forespørsel til serveren
+        const response = await fetch('https://git.heroku.com/limitless-waters-02888.githttps://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ input: message })
+        });
+        
+
+        // Hent svaret fra serveren
+        const data = await response.json();
+
+        // Vis AI-svaret
+        appendMessage("AI: " + data.answer);
+    } catch (error) {
+        console.error("Error:", error);
+        appendMessage("AI: Det oppsto en feil, prøv igjen senere.");
+    }
 }
 
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+// Funksjon for å vise meldinger i meldingsboksen
+function appendMessage(message) {
+    const messagesElement = document.getElementById("messages");
+    const newMessage = document.createElement("div");
+    newMessage.textContent = message;
+    messagesElement.appendChild(newMessage);
+    messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll til siste melding
 }

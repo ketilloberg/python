@@ -21,6 +21,7 @@
     <div class="first-container container">
         <h1>Velkommen til Python-assistenten!</h1>
         
+        <!-- Linkene til sidene -->
         <a href="hjem.html"></a> <br>
         <a href="temaer/intro.html">Introduksjon</a> <br>
         <a href="temaer/lese.html">Lese kode</a> <br>
@@ -28,6 +29,64 @@
         <a href="temaer/indeks.html">Indeks</a> <br>
         <a href="temaer/løkker.html">Løkker</a> <br>
         <a href="temaer/funkogmod.html">Funksjoner og moduler</a> <br>
+
+
     </div>
+            <!-- Chatbot-grensesnitt -->
+            <div class="chatbox">
+                <div class="messages" id="messages"></div>
+                <input type="text" id="user-input" placeholder="Skriv noe...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+    <script src="scripts.js"></script>
+    <script>
+        async function sendMessage() {
+            const inputElement = document.getElementById("user-input");
+            const message = inputElement.value;
+
+            if (message.trim() === "") return;
+
+            // Vis brukerens melding
+            appendMessage("Du: " + message);
+
+            // Tøm inputfeltet
+            inputElement.value = "";
+
+            // Send spørsmålet til serveren via en POST-forespørsel
+            const response = await fetch('http://localhost:3000/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ input: message })
+            });
+
+            // Hent svaret fra AI
+            const data = await response.json();
+
+            // Vis AI-svaret
+            appendMessage("AI: " + data.answer);
+        }
+
+        // Funksjon for å legge til meldinger i chatten
+        function appendMessage(message) {
+    const messagesElement = document.getElementById("messages");
+    const newMessage = document.createElement("div");
+
+    // Sjekk om meldingen er en liste og formatér den som en HTML-liste
+    if (message.includes("\n")) {
+        // Hvis meldingen inneholder linjeskift, prøv å formatere den som en liste
+        const listItems = message.split('\n').map(item => `<ol>${item.trim()}</ol>`).join('');
+        newMessage.innerHTML = `<ul>${listItems}</ul>`;
+    } else {
+        // Hvis ikke, vis meldingen som en vanlig tekst
+        newMessage.textContent = message;
+    }
+
+    messagesElement.appendChild(newMessage);
+    messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll til siste melding
+}
+
+    </script>
 </body>
 </html>
