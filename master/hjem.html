@@ -76,30 +76,7 @@
         console.error("Error:", error);
         appendMessage("AI: Det oppsto en feil, prøv igjen senere.");
     }
-}
 
-
-  
-    }
-
-    // Funksjon for å legge til meldinger i chatten
-    function appendMessage(message) {
-        const messagesElement = document.getElementById("messages");
-        const newMessage = document.createElement("div");
-
-        // Sjekk om meldingen er en liste og formatér den som en HTML-liste
-        if (message.includes("\n")) {
-            // Hvis meldingen inneholder linjeskift, prøv å formatere den som en liste
-            const listItems = message.split('\n').map(item => `<ol>${item.trim()}</ol>`).join('');
-            newMessage.innerHTML = `<ul>${listItems}</ul>`;
-        } else {
-            // Hvis ikke, vis meldingen som en vanlig tekst
-            newMessage.textContent = message;
-        }
-
-        messagesElement.appendChild(newMessage);
-        messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll til siste melding
-    }
 </script>
 
 </body>
