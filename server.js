@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');  // For å tillate cross-origin forespørsler
 require('dotenv').config();
+const fs = require('fs'); // For å lese filen
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,41 +10,24 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+// Les inn HTML-oversikten fra filen
+let temaOversikt = '';
+const htmlFilePath = './prompt.html'; // Endre til riktig filnavn
+
+// Les HTML-filen ved oppstart
+fs.readFile(htmlFilePath, 'utf-8', (err, data) => {
+    if (err) {
+        console.error('Kunne ikke lese oversikt.html:', err);
+    } else {
+        temaOversikt = data; // Lagre innholdet til bruk i system-prompt
+        console.log('Temaoversikten er lastet inn.');
+    }
+});
+
 // OpenAI API-nøkkel (fra .env-filen)
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-// Data for temaene
-const temaer = [
-    {
-        id: 'intro',
-        navn: 'Introduksjon',
-        beskrivelse: 'Innføring i grunnleggende elementer knyttet til syntaks og viktige nøkkelord og funksjoner.',
-        link: 'https://ketilloberg.github.io/python/master/temaer/intro.html'
-    },
-    {
-        id: 'lister',
-        navn: 'Lister',
-        beskrivelse: 'Om å opprette og bruke lister i Python, og relevante funksjoner knyttet til lister.',
-        link: 'https://ketilloberg.github.io/python/master/temaer/lister.html'
-    },
-    {
-        id: 'indeks',
-        navn: 'Indeks',
-        beskrivelse: 'Om bruk av indekser i lister og strenger.',
-        link: 'https://ketilloberg.github.io/python/master/temaer/indeks.html'
-    },
-    {
-        id: 'funkogmod',
-        navn: 'Funksjoner og moduler',
-        beskrivelse: 'Om å lage egne funksjoner og bruke moduler som Turtle, Math, Random og Time.',
-        link: 'https://ketilloberg.github.io/python/master/temaer/funkogmod.html'
-    }
-];
 
-// API-endepunkt for å hente temalisten
-app.get('/api/temaer', (req, res) => {
-    res.json({ temaer });
-});
 
 // Chatbot-logikken og annet innhold
 app.post('/ask', async (req, res) => {
@@ -54,7 +38,7 @@ app.post('/ask', async (req, res) => {
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: 'gpt-4o',
             messages: [
-                { role: 'system', content: `Du er en assistent som hjelper elever med å lære programmering og matematikk ved hjelp av nettsiden "Python-hjelpen". Du skal bruke dataene fra API-et som inneholder følgende temaer:\n\n${temaer.map(t => `- **${t.navn}**: ${t.beskrivelse} (${t.link})`).join('\n')}\n\nSvarene dine skal være veiledende og hjelpe elevene med å finne riktig ressurs. Du ikke skrive inn URL i svaret, men henvise til id. Ikke gi noen løsninger. Temaer som ikke handler om matematikk og programmering skal avvises på en vennlig måte` },
+                { role: 'system', content: `Du er en assistent som hjelper elever med å lære programmering og matematikk ved hjelp av nettsiden "Python-hjelpen". Her er en oversikt over nettsiden: \n\n${temaOversikt}\n\n Svarene dine skal være veiledende og hjelpe elevene med å finne riktig ressurs. Du ikke skrive inn URL i svaret, men henvise til overskrifter og/eller underkategorier. Ikke gi noen direkte løsninger. Temaer som ikke handler om matematikk og programmering skal avvises på en vennlig måte` },
                 { role: 'user', content: userInput }
             ],
             max_tokens: 250,
