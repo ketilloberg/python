@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python-hjelpen</title>
+    <!-- Link til CSS-filen -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="../hjem.html">Hjem</a>
+        <a href="intro.html">Introduksjon</a>
+        <a href="lese.html">Lese kode</a>
+        <a href="lister.html">Lister</a>
+        <a href="indeks.html">Indeks</a>
+        <a href="løkker.html">Løkker</a>
+        <a href="funkogmod.html">Funksjoner og moduler</a>
+        <a href="oppgaver.html">Oppgaver</a>
+    </div>
+    <div class="first-container container">
+
+        <h1>Indeksering i lister og strings</h1>
+        <a href="#etelement">Indeksnummer</a><br>
+        <a href="#etintervall">Hente flere ting ved hjelp av indeks</a><br>
+        <a href="#forskjell">Forskjeller mellom liste og string</a>
+    </div>
+    <div id="etelement" class="container">
+        <h2>Indeksnummer</h2>
+        <embed src="tekst/indeksliste.html" width="100%" height="200" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen tabindex="-1"></embed>
+        <h3>Indeksnummer for lister</h3>
+        <div style="padding: 40% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1035902097?h=ef1086f1f9&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="indeksliste"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+        <p>Du kan også gå baklengs når du bruker indeks. Da har siste posisjon indeksnummer -1, nest siste posisjon har indeksnummer -2, og så videre.</p>
+        <h4>EKsempel på indeksnummer for lister:</h4>
+        <div class="code-container">
+            <span class="code-label">Input</span>
+        
+        <code><pre> 
+            line1 #Indeks i en liste
+            
+            line2 min_liste = [‘eple',’pære’,’banan’,’appelsin’]
+
+            line3 print(min_liste[0]) #skriver ut 'eple' som har første posisjon i listen
+            
+            line4 print(min_liste[1]) #skriver ut 'pære' som har andre posisjon i listen
+            
+            line5 print(min_liste[3]) #skriver ut 'appelsin' som har fjerde posisjon i listen
+            
+            line6 print(min_liste[-1]) #skriver ut 'appelsin' som har siste posisjon i listen
+        </pre></code>
+        </div>
+        <div class="code-container">
+            <span class="code-label">Output</span>
+        <code><pre>
+            
+            eple
+            
+            pære
+            
+            appelsin
+            
+            appelsin
+        </pre></code>
+        </div>
+        <h3>Indeksnummer for strings:</h3>
+        <div style="padding:40% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1035902409?h=7cd5c6ae87&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="indeksstring"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+        <h4>Eksempel på indeksnummer for strings:</h4>
+        <div class="code-container">
+            <span class="code-label">Input</span>
+        <code><pre>
+            line1 #Indeks i en string
+            line2 min_string = "Hei"
+            line3 print(min_string[0]) #skriver ut H som har første posisjon i stringen
+            line4 print(min_string[1]) #skriver ut e som har andre posisjon i stringen
+            line5 print(min_string[-1]) #skriver ut i som har siste posisjon i stringen
+        </pre></code>
+        </div>
+        <div class="code-container">
+            <span class="code-label">Output</span>
+        <code><pre>
+            H
+            e
+            i
+        </pre></code>
+        </div>
+        <a href="#" onclick="scrollToTop()">Tilbake til toppen</a>
+    </div>
+    <div id="etintervall" class="container">
+        <h2>Hente flere ting ved hjelp av indeks</h2>
+        <embed src="tekst/indekslisteflere.html" width="100%" height="230" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen tabindex="-1"></embed>
+        <h3>Hente flere ting fra en liste:</h3>
+        <div style="padding:40% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1035900352?h=56bb9013e1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="indeksflereliste"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+        
+        <p>For å reversere listen se eksempel under.</p>
+        <div class="code-container">
+            <span class="code-label">Input</span>
+        
+            <code><pre>
+            
+                line1 #Intervall av ting i en liste
+                
+                line2 min_liste = ['start',3,9,7,6,12,4,76,3.13,13,'slutt']
+                
+                line3 print(min_liste[1:3]) #skriver ut [3,9] som har andre og tredje posisjon i listen
+                
+                line4 print(min_liste[:2]) #skriver ut ['start',3] som har første og andre posisjon i listen
+                
+                line5 print(min_liste[2:]) #skriver ut [9,7,6,12,4,76,3.13,13,'slutt']
+                
+                line6 print(min_liste[::-1]) #skriver ut ['slutt', 13, 3.13, 76, 4, 12, 6, 7, 9, 3, 'start'] som har reversert rekkefølge i listen
+            </pre></code>
+        </div>
+        <div class="code-container">
+            <span class="code-label">Output</span>
+        <code><pre>
+            [3,9]
+            
+            ['start',3]
+            
+            [9,7,6,12,4,76,3.13,13,'slutt']
+            
+            ['slutt', 13, 3.13, 76, 4, 12, 6, 7, 9, 3, 'start']
+        </pre></code>
+        </div>
+        <h3>Intervall av ting i en string:</h3>
+        <div style="padding:40% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1035901508?h=662329936e&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="indeksflerestring"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+        <div class="code-container">
+            <span class="code-label">Input</span>
+        <code><pre>
+            line1 #Intervall av ting i en string
+            line2 min_string = "Hei"
+            line3 print(min_string[1:3]) #skriver ut ei som har andre og tredje posisjon i stringen
+            line4 print(min_string[:2]) #skriver ut He som har første og andre posisjon i stringen
+            line5 print(min_string[2:]) #skriver ut i som har tredje posisjon i stringen
+            line6 print(min_string[::-1]) #skriver ut ieH som har reversert rekkefølge i stringen
+        </pre></code>
+        </div>
+        <div class="code-container">
+            <span class="code-label">Output</span>
+        <code><pre>
+            ei
+            He
+            i
+            ieH
+        </pre></code>
+        </div>
+        <a href="#" onclick="scrollToTop()">Tilbake til toppen</a>
+    </div>
+        <div id="forskjell" class="container">
+            <h2>Forskjeller mellom liste og string</h2>
+            <embed src="tekst/indeksstrredigere.html" width="100%" height="550" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen tabindex="-1"></embed>
+            <h3>Eksempel på forskjeller mellom liste og string:</h3>
+            <div class="code-container">
+                <span class="code-label">Input</span>
+            <code><pre>
+                line1 #Forskjell mellom liste og string
+                
+                line2 min_liste = ['eple', 'pære', 'banan']
+                
+                line3 min_string = 'eple'
+                
+                line4 min_liste[0] = 'appelsin' #endrer første element i listen til 'appelsin'
+                
+                line5 min_string[0] = 'a' #får feilmelding fordi du ikke kan endre en string
+            </pre></code></div>
+            <div class="code-container">
+                <span class="code-label">Output</span>
+            <code><pre>
+                appelsin
+                
+                TypeError: 'str' object does not support item assignment
+            </pre></code></div>
+            
+            <p>En liste kan inneholde flere ting, mens en string er en samling av symboler. En string kan ikke redigeres, men det kan en liste.</p>
+            <a href="#" onclick="scrollToTop()">Tilbake til toppen</a>
+        </div>
+        
+        </div>
+        
+    </div>
+    <script>
+        window.addEventListener('load', function() {
+            document.getElementById('preloader').style.display = 'none';
+            document.body.style.visibility = 'visible';
+            document.getElementById('content').style.display = 'block';
+        });
+    </script>
+    <script src="../scripts.js"></script>
+</body>
+</html>

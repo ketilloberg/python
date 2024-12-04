@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>/* Preloader-stiler */
+        #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8); /* Gjør skjermen litt gjennomsiktig */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        font-size: 24px;
+        color: #333;
+    }
+
+    .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #333;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    body {
+        visibility: hidden; /* Skjul innhold før alt er lastet */
+    }
+
+    #content {
+        display: none; /* Skjul innhold før alt er lastet */
+    }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python-hjelpen</title>
+    <!-- Link til CSS-filen -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+        <p>Vennligst vent, siden lastes...</p>
+    </div>
+    
+    <div id="content">
+    <div class="navbar">
+
+        <a href="../hjem.html">Hjem</a>
+        <a href="intro.html">Introduksjon</a>
+        <a href="lese.html">Lese kode</a>
+        <a href="lister.html">Lister</a>
+        <a href="indeks.html">Indeks</a>
+        <a href="løkker.html">Løkker</a>
+        <a href="funkogmod.html">Funksjoner og moduler</a>
+        <a href="oppgaver.html">Oppgaver</a>
+    </div>
+    <div class="first-container container">
+
+        <h1 id = "opp">Programmering</h1>
+        <a href="#programmering">Hva er programmering?</a><br>
+        <a href="#python">Kort om Python</a><br>
+        <a href="#start">Komme i gang med programmering</a><br>
+        <a href="#matematikk">Matematiske operasjoner i Python</a><br>
+        <a href="#viktig">Viktige nøkkelord og funksjoner</a>
+    </div>
+    <div id="programmering" class="container">
+        <h2>Hva er programmering?</h2>
+    <!--Sett inn video-->
+    <a href="#" onclick="scrollToTop()">Tilbake til toppen</a>
+    </div>
+    <div id="python" class="container">
+        <h2>Kort om Python</h2>
+    <!--Sett inn video-->
+        <a href="#" onclick="scrollToTop()">Tilbake til toppen</a>
+    </div>
+    <div id="start" class="container">
+        <h2>Komme i gang med programmering</h2>
+    <!--Sett inn video-->
+        <h3>Prøv å lag noen koder i feltet under:</h3>
+        <iframe src="https://trinket.io/embed/python/d8f57fa1ae2a" width="100%" height="400" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen tabindex="-1"></iframe>
+        <a href="#" onclick="scrollToTop()">Tilbake til toppen</a>
+    </div>
+    <div id="matematikk" class="container">
+        <h2>Matematiske operasjoner i Python:</h2>
+    <!--Sett inn video-->
+        <embed src="tekst/symbol.html" width="100%" height="400" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen tabindex="-1"></embed>
+        <a href="#" onclick="scrollToTop()">Tilbake til toppen</a>
+    </div>
+    <div id="viktig" class="container">
+        <h2>Viktige nøkkelord og funksjoner:</h2>
+        <a href="#print">print()</a><br>
+        <a href="#range">range()</a><br>
+        <a href="#len">len()</a><br>
+        <a href="#type">type()</a><br>
+        <a href="#input">input()</a><br>
+        <a href="#betingelser">Betingelser</a><br>
+        <a href="#logisk">Logiske begreper: in, and, or</a><br>
+
+        <h3 id="print"> print()</h3>
+        <p>print () er en funksjon som sender data (informasjon) fra kodefeltet til konsollen.</p>
+        <div class="code-container">
+            <span class="code-label">Input</span>
+        <code><pre>
+            print("Hei, verden!")
+        </pre></code>
+        </div>
+        <div class="code-container">
+            <span class="code-label">Output</span>
+        <code><pre>
+            Hei, verden!
+        </pre></code>
+        </div>
+        <h3 id="range">range()</h3>
+        <p>range () er en funksjon som genererer en sekvens av tall.</p>
+        <div style="padding:40% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1035903733?h=081901c6f0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="range"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+        <div style="padding:40% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1035903266?h=0a43f0f245&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="rangeforloop"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+        <h4>Eksempel på bruk av range () i en for-løkke:</h4>
+        <div class="code-container">
+            <span class="code-label">Input</span>
+        <code><pre>
+            for x in range(5):
+                print(x)
+        </pre></code>
+        </div>
+        <div class="code-container">
+            <span class="code-label">Output</span>
+        <code><pre>
+            0
+            1
+            2
+            3
+            4
+        </pre></code>
+        </div>
+        <h3 id="len">len()</h3>
+        <p>len () er en funksjon som returnerer lengden på et objekt.</p>
+        <div class="code-container">
+            <span class="code-label">Input</span>
+        <code><pre>
+            min_liste = [1, 2, 3, 4, 5]
+            print(len(min_liste))
+            min_string = "Hei"
+        </pre></code>
+        </div>
+        
+        
+        <div class="code-container">
+            <span class="code-label">Output</span>
+        <code><pre>
+            5
+            3
+        </pre></code>
+        </div>
+        <h4>Eksempel på bruk av len () og for-løkke:</h4>
+        <p2>OBS! i videoen nevner jeg ikke at sym tilsvarer indeksnummeret til hvert symbol i stringen!</p2>
+        <div style="padding:40% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1035902856?h=0342ad1f9d&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="lenrange"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+        <h3 id="type">type()</h3>
+        <p>type () er en funksjon som returnerer typen til et objekt.</p>
+        <div class="code-container">
+            <span class="code-label">Input</span>
+        <code><pre>
+            min_liste = [1, 2, 3, 4, 5]
+            print(type(min_liste))
+            min_string = "Hei"
+            print(type(min_string))
+            mitt_tall = 3
+            print(type(mitt_tall))
+            mitt_desimaltall = 3.0
+            print(type(mitt_desimaltall))
+        </pre></code>
+        </div>
+        <div class="code-container">
+            <span class="code-label">Output</span>
+        <code><pre>
+            &lt;class 'list'&gt;
+            &lt;class 'str'&gt;
+            &lt;class 'int'&gt;
+            &lt;class 'float'&gt;
+        </pre></code>
+        </div>
+        <h3 id="input">input()</h3>
+        <p>input () er en funksjon som lar brukeren skrive inn data.</p>
+        <div style="padding:40% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1035902653?h=77a961da9a&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="input"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+        <div class="code-container">
+            <span class="code-label">Input</span>
+        <code><pre>
+            navn = input("Skriv inn navnet ditt: ")
+            print("Hei, " + navn)
+        </pre></code>
+        </div>
+        <div class="code-container">
+            <span class="code-label">Output</span>
+        <code><pre>
+            Skriv inn navnet ditt: Ola
+            Hei, Ola
+        </pre></code>
+        </div>
+        <h3 id="betingelser">Betingelser</h3>
+        <!--Sett inn video-->
+        <h3>Logiske begreper: in, and, or </h3>
+        <!--Sett inn video-->
+        <h2>Oversikt og forklaringer:</h2>
+        <embed src="tekst/nokkel.html" width="100%" height="400" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen tabindex="-1"></embed>
+        <a href="#" onclick="scrollToTop()">Tilbake til toppen</a>
+
+    </div>
+</div>
+    <script>
+        window.addEventListener('load', function() {
+            document.getElementById('preloader').style.display = 'none';
+            document.body.style.visibility = 'visible';
+            document.getElementById('content').style.display = 'block';
+        });
+    </script>
+    <script src="../scripts.js"></script>
+</body>
+</html>

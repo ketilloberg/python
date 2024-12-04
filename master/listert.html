@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Preloader styling */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Gjør skjermen litt gjennomsiktig */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            font-size: 24px;
+            color: #333;
+        }
+
+        /* Spinner styling */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #333;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Skjul innholdet før alt er lastet */
+        body {
+            visibility: hidden;
+        }
+
+        /* Resten av innholdet skjules til alt er lastet */
+        #content {
+            display: none;
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python-hjelpen</title>
+    <!-- Link til CSS-filen -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="content">
+        <!-- Din eksisterende HTML-struktur begynner her -->
+        <div id="focus-point" tabindex="-1"></div>
+        <div class="navbar">
+            <a href="../hjem.html">Startside</a>
+            <a href="intro.html">Introduksjon</a>
+            <a href="lese.html">Lese kode</a>
+            <a href="lister.html">Lister</a>
+            <a href="indeks.html">Indeks</a>
+            <a href="løkker.html">Løkker</a>
+            <a href="funkogmod.html">Funksjoner og moduler</a>
+        </div>
+        <div class="container">
+            <h1 id="lister">Lister</h1>
+            <a href="#opprett">Opprette lister</a><br>
+            <a href="#sorter">Sortering: .sort()</a><br>
+            <a href="#revers">Reversere: .revere()</a><br>
+            <a href="#append">Legge til en verdi: .append()</a><br>
+            <a href="#remove">Fjerne en verdi: .remove()</a><br>
+            <a href="#pop">Fjerne siste verdi: .pop()</a><br>
+        </div>
+
+        <div class="container">
+            <h2 id="opprett">Opprette lister:</h2>
+            <video width="640" height="360" controls>
+                <source src="video/listeintro.mp4" type="video/mp4">
+            </video><br>
+            <embed src="tekst/oppretteliste.html" width="1000" height="240" tabindex="-1"></embed>
+            <iframe src="https://trinket.io/embed/python/6425ec564f90" data-no-lazyload="true" width="100%" height="420" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen onload="onIframeLoad()"></iframe>
+            <a href="#lister">Tilbake til toppen</a>
+        </div>
+        <div class="container">
+            <embed id="sorter" src="tekst/sortere.html" width="1000" height="230" tabindex="-1"></embed>
+            <iframe src="https://trinket.io/embed/python/a0286bf3cd5b" data-no-lazyload="true" width="100%" height="430" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen onload="onIframeLoad()"></iframe>
+            <a href="#lister">Tilbake til toppen</a>
+        </div>
+        <div class="container">
+            <embed id="revers" src="tekst/revers.html" width="1000" height="230" tabindex="-1"></embed>
+            <iframe src="https://trinket.io/embed/python/fcb615299eae" data-no-lazyload="true" width="100%" height="350" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen onload="onIframeLoad()"></iframe>
+            <a href="#lister">Tilbake til toppen</a>
+        </div>
+        <div class="container" tabindex="-1">
+            <embed id="append" src="tekst/append.html" width="1000" height="230" tabindex="-1"></embed>
+            <iframe src="https://trinket.io/embed/python/5bcfdc9d7add" data-no-lazyload="true" width="100%" height="400" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen onload="onIframeLoad()"></iframe>
+            <a href="#lister">Tilbake til toppen</a>
+        </div>
+    </div>
+
+    <script>
+        function onIframeLoad() {
+            // Forsink rulling til toppen
+            setTimeout(function() {
+                window.scrollTo(0, 0); // Tving rullingen til toppen
+            }, 100); // 1 sekund forsinkelse
+        }
+
+        window.onload = function() {
+            // Når alt er lastet, skjul preloaderen og vis innholdet
+            document.getElementById('preloader').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+
+            // Gjør kroppen synlig etter at innholdet er lastet
+            document.body.style.visibility = 'visible';
+        };
+    </script>
+</body>
+</html>
