@@ -43,7 +43,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
-/* Første container */
+/* FÃ¸rste container */
 .first-container {
     margin-top: 80px;
 }
@@ -97,7 +97,7 @@ ul li {
 }
 
 ul li::before {
-    content: "•";
+    content: "â€¢";
     color: #0056b3;
     margin-right: 10px;
     font-weight: bold;
@@ -179,17 +179,17 @@ code {
 }
 code {
     font-family: monospace;
-    background-color: #f4f4f4; /* Lys grå bakgrunn */
+    background-color: #f4f4f4; /* Lys grÃ¥ bakgrunn */
     padding: 2px 4px;
     border-radius: 3px;
-    color: #333; /* Mørk tekstfarge */
+    color: #333; /* MÃ¸rk tekstfarge */
 }
 pre {
-    background-color: #f4f4f4; /* Lys grå bakgrunn */
+    background-color: #f4f4f4; /* Lys grÃ¥ bakgrunn */
     padding: 10px;
     border: 1px solid #ddd; /* Tynn kant rundt */
     border-radius: 5px;
-    color: #333; /* Mørk tekstfarge */
+    color: #333; /* MÃ¸rk tekstfarge */
     overflow: auto; /* Scroll hvis koden er for lang */
 }
 /* Ny stil for etiketter */
