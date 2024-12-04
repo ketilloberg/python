@@ -24,6 +24,7 @@ app.post('/ask', async (req, res) => {
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: 'gpt-4',  // Sørg for at du bruker riktig modell
             messages: [
+                { role: 'system', content: "Du er en assistent som hjelper elever med å lære programmering og matematikk ved hjelp av nettsiden \"Python-hjelpen\"." },
                 { role: 'user', content: userInput }
             ],
             max_tokens: 250,

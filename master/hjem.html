@@ -54,6 +54,20 @@
 
     try {
         // Send forespørselen til serveren (Heroku URL-en)
+<script>
+    async function sendMessage() {
+        const inputElement = document.getElementById("user-input");
+        const message = inputElement.value;
+
+        if (message.trim() === "") return;
+
+        // Vis brukerens melding
+        appendMessage("Du: " + message);
+
+        // Tøm inputfeltet
+        inputElement.value = "";
+
+        // Send spørsmålet til serveren via en POST-forespørsel
         const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', {
             method: 'POST',
             headers: {
@@ -68,6 +82,7 @@
         }
 
         // Hent svaret fra serveren
+        // Hent svaret fra AI
         const data = await response.json();
 
         // Vis AI-svaret
@@ -80,5 +95,27 @@
 
 
     </script>
+    }
+
+    // Funksjon for å legge til meldinger i chatten
+    function appendMessage(message) {
+        const messagesElement = document.getElementById("messages");
+        const newMessage = document.createElement("div");
+
+        // Sjekk om meldingen er en liste og formatér den som en HTML-liste
+        if (message.includes("\n")) {
+            // Hvis meldingen inneholder linjeskift, prøv å formatere den som en liste
+            const listItems = message.split('\n').map(item => `<ol>${item.trim()}</ol>`).join('');
+            newMessage.innerHTML = `<ul>${listItems}</ul>`;
+        } else {
+            // Hvis ikke, vis meldingen som en vanlig tekst
+            newMessage.textContent = message;
+        }
+
+        messagesElement.appendChild(newMessage);
+        messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll til siste melding
+    }
+</script>
+
 </body>
 </html>
