@@ -39,21 +39,6 @@
                 <button onclick="sendMessage()">Send</button>
             </div>
     <script src="scripts.js"></script>
-    <script>
-        async function sendMessage() {
-    const inputElement = document.getElementById("user-input");
-    const message = inputElement.value;
-
-    if (message.trim() === "") return; // Ikke send tomme meldinger
-
-    // Vis brukerens melding
-    appendMessage("Du: " + message);
-
-    // Tøm inputfeltet
-    inputElement.value = "";
-
-    try {
-        // Send forespørselen til serveren (Heroku URL-en)
 <script>
     async function sendMessage() {
         const inputElement = document.getElementById("user-input");
@@ -94,7 +79,7 @@
 }
 
 
-    </script>
+  
     }
 
     // Funksjon for å legge til meldinger i chatten
