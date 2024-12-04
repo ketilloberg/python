@@ -52,7 +52,7 @@ app.post('/ask', async (req, res) => {
 
     try {
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-            model: 'gpt-4',
+            model: 'gpt-4o',
             messages: [
                 { role: 'system', content: `Du er en assistent som hjelper elever med å lære programmering og matematikk ved hjelp av nettsiden "Python-hjelpen". Du skal bruke dataene fra API-et som inneholder følgende temaer:\n\n${temaer.map(t => `- **${t.navn}**: ${t.beskrivelse} (${t.link})`).join('\n')}\n\nSvarene dine skal være veiledende og hjelpe elevene med å finne riktig ressurs. Du ikke skrive inn URL i svaret, men henvise til id. Ikke gi noen løsninger. Temaer som ikke handler om matematikk og programmering skal avvises på en vennlig måte` },
                 { role: 'user', content: userInput }
