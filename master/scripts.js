@@ -51,7 +51,7 @@ async function sendMessage() {
 
     try {
         // Send forespørsel til serveren
-        const response = await fetch('https://git.heroku.com/limitless-waters-02888.githttps://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', {
+        const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
