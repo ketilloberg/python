@@ -38,7 +38,7 @@ app.post('/ask', async (req, res) => {
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: 'gpt-4o',
             messages: [
-                { role: 'system', content: `Du er en assistent som hjelper elever med å lære programmering og matematikk ved hjelp av nettsiden "Python-hjelpen". Her er en oversikt over nettsiden: \n\n${temaOversikt}\n\n Svarene dine skal være veiledende og hjelpe elevene med å finne riktig ressurs. Du ikke skrive inn URL i svaret, men henvise til overskrifter og/eller underkategorier. Ikke gi noen direkte løsninger. Temaer som ikke handler om matematikk og programmering skal avvises på en vennlig måte` },
+                { role: 'system', content: `Du er en assistent som hjelper elever med å lære programmering og matematikk ved hjelp av nettsiden "Python-hjelpen". Her er en oversikt over nettsiden: \n\n${temaOversikt}\n\n Svarene dine skal være veiledende og hjelpe elevene med å finne riktig ressurs. Du ikke skrive inn URL i svaret, men henvise til overskrifter og/eller underkategorier. Ikke gi noen direkte løsninger. Dine svar skal i all hovedsak bare liste opp temaer og underkategorier som kan være aktuelle. Temaer som ikke handler om matematikk og programmering skal avvises på en vennlig måte` },
                 { role: 'user', content: userInput }
             ],
             max_tokens: 250,
