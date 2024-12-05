@@ -21,7 +21,7 @@ const corsOptions = {
     origin: '*', // Tillater alle domener. Sett til spesifikke URL-er for økt sikkerhet
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Tillater spesifikke HTTP-metoder
     allowedHeaders: ['Content-Type', 'Authorization'], // Tillater spesifikke headers
-    preflightContinue: true, // Fortsetter preflight-sjekking uten å avslutte den
+    preflightContinue: false, // Fortsetter preflight-sjekking uten å avslutte den
     optionsSuccessStatus: 204 // No content på successful OPTIONS preflight
 };
 
