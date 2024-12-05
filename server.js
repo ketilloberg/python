@@ -9,6 +9,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const promptFilePath = './prompt.txt';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const cors = require('cors');
+
+// Middleware for å tillate CORS
+const corsOptions = {
+    origin: '*', // Tillater alle opprinnelser. For spesifikke domener, sett en liste av URL-er
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Tillater spesifikke HTTP-metoder
+    allowedHeaders: ['Content-Type', 'Authorization'] // Tillater spesifikke headers
+};
+
+// Bruk CORS middleware før ruter
+app.use(cors(corsOptions));
+
 
 let promptContent = '';
 
