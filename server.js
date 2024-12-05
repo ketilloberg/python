@@ -1,59 +1,55 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors');  // For å tillate cross-origin forespørsler
-require('dotenv').config();
-const fs = require('fs'); // For å lese filen
+const cors = require('cors'); // Tillater cross-origin forespørsler
+const fs = require('fs'); // For å lese filer
+require('dotenv').config(); // Laster miljøvariabler
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const promptFilePath = './prompt.txt'; // Pass på at denne pathen er riktig
+let promptContent = '';
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Les inn HTML-oversikten fra filen
-let temaOversikt = '';
-const htmlFilePath = './prompt.html'; // Endre til riktig filnavn
-
-// Les HTML-filen ved oppstart
-fs.readFile(htmlFilePath, 'utf-8', (err, data) => {
-    if (err) {
-        console.error('Kunne ikke lese oversikt.html:', err);
-    } else {
-        temaOversikt = data; // Lagre innholdet til bruk i system-prompt
-        console.log('Temaoversikten er lastet inn.');
-    }
-});
-
+// Les inn prompt ved oppstart
+try {
+    promptContent = fs.readFileSync(promptFilePath, 'utf8');
+    console.log('Prompt lastet inn fra prompt.txt');
+} catch (error) {
+    console.error('Kunne ikke lese prompt.txt:', error.message);
+    process.exit(1); // Stopper serveren hvis filen mangler
+}
 // OpenAI API-nøkkel (fra .env-filen)
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-
-
-// Chatbot-logikken og annet innhold
+// Chatbot API-endepunkt
 app.post('/ask', async (req, res) => {
     const userInput = req.body.input;
-    console.log("Mottatt input:", userInput);
 
     try {
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: 'gpt-4o',
             messages: [
-                { role: 'system', content: `Du er en assistent som hjelper elever med å lære programmering og matematikk ved hjelp av nettsiden "Python-hjelpen". Her er en oversikt over nettsiden: \n\n${temaOversikt}\n\n Svarene dine skal være veiledende og hjelpe elevene med å finne riktig ressurs. Du ikke skrive inn URL i svaret, men henvise til overskrifter og/eller underkategorier. Ikke gi noen direkte løsninger. Dine svar skal i all hovedsak bare liste opp temaer og underkategorier som kan være aktuelle. Temaer som ikke handler om matematikk og programmering skal avvises på en vennlig måte` },
+                { 
+                    role: 'system', 
+                    content: `Du er en assistent som hjelper elever med å lære programmering og matematikk ved hjelp av nettsiden "Python-hjelpen". Her er en oversikt over nettsiden: \n\n${promptContent}\n\nSvarene dine skal være veiledende og hjelpe elevene med å finne riktig ressurs. Ikke gi URL-er, men henvis til overskrifter og underkategorier. Ikke gi løsninger, kun pek til relevante temaer. Avvis vennlig spørsmål som ikke handler om programmering eller matematikk.` 
+                },
                 { role: 'user', content: userInput }
             ],
             max_tokens: 250,
             temperature: 0.7,
         }, {
             headers: {
-                'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
                 'Content-Type': 'application/json',
             }
         });
 
-        console.log("API-svar:", response.data);
         res.json({ answer: response.data.choices[0].message.content.trim() });
     } catch (error) {
-        console.error('Error with OpenAI API:', error.response ? error.response.data : error.message);
+        console.error('Feil med OpenAI API:', error.response ? error.response.data : error.message);
         res.status(500).send('Internal Server Error');
     }
 });
