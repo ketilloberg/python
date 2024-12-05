@@ -29,16 +29,27 @@ document.addEventListener('DOMContentLoaded', function () {
     // Hent tekstfeltet for brukerinput
     const userInputField = document.getElementById("user-input");
     if (userInputField) {
-        // Lytt etter tastetrykk
+        // Lytt etter tastetrykk (keydown) i tekstfeltet
         userInputField.addEventListener("keydown", function (event) {
             // Hvis Enter trykkes uten Shift, send meldingen
             if (event.key === "Enter" && !event.shiftKey) {
                 event.preventDefault(); // Forhindre linjeskift
                 sendMessage(); // Kall sendMessage-funksjonen
+            } 
+            // Hvis Shift + Enter trykkes, legg til en ny linje
+            else if (event.key === "Enter" && event.shiftKey) {
+                event.preventDefault(); // Forhindre standard oppførsel (ikke sende)
+                const start = userInputField.selectionStart;
+                const end = userInputField.selectionEnd;
+                // Sett inn linjeskift på riktig sted i tekstfeltet
+                userInputField.value = userInputField.value.substring(0, start) + "\n" + userInputField.value.substring(end);
+                // Behold markøren på riktig posisjon etter linjeskift
+                userInputField.selectionStart = userInputField.selectionEnd = start + 1;
             }
         });
     }
 });
+
 
 // Funksjonen som sender meldinger
 async function sendMessage() {
@@ -55,7 +66,7 @@ async function sendMessage() {
 
     try {
         // Send forespørsel til serveren
-        const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', { //lagre http://localhost:3000/ask
+        const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', { //lagre https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
