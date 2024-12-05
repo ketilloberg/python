@@ -71,21 +71,29 @@ async function sendMessage() {
     }
 }
 
+
 // Funksjon for å legge til meldinger i chatten
 function appendMessage(message) {
     const messagesElement = document.getElementById("messages");
     const newMessage = document.createElement("div");
 
-    // Sjekk om meldingen er en liste og formatér den som en HTML-liste
+    // Hvis meldingen er en liste, formater den med ul/li
     if (message.includes("\n")) {
-        // Hvis meldingen inneholder linjeskift, prøv å formatere den som en liste
-        const listItems = message.split('\n').map(item => `<ol>${item.trim()}</ol>`).join('');
+        const listItems = message.split('\n').map(item => {
+            if (item.startsWith("-")) {
+                return `<li>${item.replace('-', '').trim()}</li>`;
+            } else {
+                return `<p>${item.trim()}</p>`;
+            }
+        }).join('');
+        
         newMessage.innerHTML = `<ul>${listItems}</ul>`;
     } else {
-        // Hvis ikke, vis meldingen som en vanlig tekst
+        // Hvis ikke, vis meldingen som vanlig tekst
         newMessage.textContent = message;
     }
 
+    // Legg til den nye meldingen i chatten
     messagesElement.appendChild(newMessage);
     messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll til siste melding
 }

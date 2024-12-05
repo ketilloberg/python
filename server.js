@@ -27,10 +27,6 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 // Chatbot API-endepunkt
 app.post('/ask', async (req, res) => {
     const userInput = req.body.input;
-    if (userInput.trim().toLowerCase() === 'prompt') {
-        console.log("Prompt skal sendes tilbake");  // Bekreft at "prompt" er gjenkjent
-        return res.json({ answer: promptContent });
-    }
     try {
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: 'gpt-4o',
@@ -50,7 +46,11 @@ app.post('/ask', async (req, res) => {
             }
         });
 
-        res.json({ answer: response.data.choices[0].message.content.trim() });
+       // Her formaterer vi svaret med HTML-lister
+       let formattedAnswer = response.data.choices[0].message.content.trim().replace(/\n/g, "<br/>");
+
+       // Returner det HTML-formatert svaret
+       res.json({ answer: formattedAnswer });
     } catch (error) {
         console.error('Feil med OpenAI API:', error.response ? error.response.data : error.message);
         res.status(500).send('Internal Server Error');
