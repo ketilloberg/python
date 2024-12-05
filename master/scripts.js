@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 async function sendMessage() {
     const inputElement = document.getElementById("user-input");
     const message = inputElement.value;
-
+    console.log("sendMessage kalt, brukerinput:", message); // Logg for å sjekke om funksjonen blir kalt
     if (message.trim() === "") return; // Ikke send tomme meldinger
 
     // Vis brukerens melding
@@ -64,7 +64,7 @@ async function sendMessage() {
         const data = await response.json();
 
         // Vis AI-svaret
-        appendMessage("AI: " + data.answer);
+        appendMessage("Python-assistent: " + data.answer);
     } catch (error) {
         console.error("Error:", error);
         appendMessage("AI: Det oppsto en feil, prøv igjen senere.");

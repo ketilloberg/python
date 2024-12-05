@@ -27,14 +27,17 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 // Chatbot API-endepunkt
 app.post('/ask', async (req, res) => {
     const userInput = req.body.input;
-
+    if (userInput.trim().toLowerCase() === 'prompt') {
+        console.log("Prompt skal sendes tilbake");  // Bekreft at "prompt" er gjenkjent
+        return res.json({ answer: promptContent });
+    }
     try {
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: 'gpt-4o',
             messages: [
                 { 
                     role: 'system', 
-                    content: `Du er en assistent som hjelper elever med å lære programmering og matematikk ved hjelp av nettsiden "Python-hjelpen". Her er en oversikt over nettsiden: \n\n${promptContent}\n\nSvarene dine skal være veiledende og hjelpe elevene med å finne riktig ressurs. Ikke gi URL-er, men henvis til overskrifter og underkategorier. Ikke gi løsninger, kun pek til relevante temaer. Avvis vennlig spørsmål som ikke handler om programmering eller matematikk.` 
+                    content: `${promptContent}` 
                 },
                 { role: 'user', content: userInput }
             ],

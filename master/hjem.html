@@ -41,40 +41,42 @@
     <script src="scripts.js"></script>
 <script>
     async function sendMessage() {
-        const inputElement = document.getElementById("user-input");
-        const message = inputElement.value;
+        try {
+            const inputElement = document.getElementById("user-input");
+            const message = inputElement.value;
 
-        if (message.trim() === "") return;
+            if (message.trim() === "") return;
 
-        // Vis brukerens melding
-        appendMessage("Du: " + message);
+            // Vis brukerens melding
+            appendMessage("Du: " + message);
 
-        // Tøm inputfeltet
-        inputElement.value = "";
+            // Tøm inputfeltet
+            inputElement.value = "";
 
-        // Send spørsmålet til serveren via en POST-forespørsel
-        const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ input: message })
-        });
+            // Send spørsmålet til serveren via en POST-forespørsel
+            const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ input: message })
+            });
 
-        // Sjekk om API-anropet var vellykket
-        if (!response.ok) {
-            throw new Error(`Serveren svarte med status: ${response.status}`);
+            // Sjekk om API-anropet var vellykket
+            if (!response.ok) {
+                throw new Error(`Serveren svarte med status: ${response.status}`);
+            }
+
+            // Hent svaret fra serveren
+            // Hent svaret fra AI
+            const data = await response.json();
+
+            // Vis AI-svaret
+            appendMessage("AI: " + data.answer);
+        } catch (error) {
+            console.error("Error:", error);
+            appendMessage("AI: Det oppsto en feil, prøv igjen senere.");
         }
-
-        // Hent svaret fra serveren
-        // Hent svaret fra AI
-        const data = await response.json();
-
-        // Vis AI-svaret
-        appendMessage("AI: " + data.answer);
-    } catch (error) {
-        console.error("Error:", error);
-        appendMessage("AI: Det oppsto en feil, prøv igjen senere.");
     }
 
 </script>
