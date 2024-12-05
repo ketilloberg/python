@@ -1,13 +1,22 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors'); // Tillater cross-origin forespørsler
-const fs = require('fs'); // For å lese filer
-require('dotenv').config(); // Laster miljøvariabler
+const cors = require('cors');
+const fs = require('fs');
+const redis = require('redis');
+require('dotenv').config(); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const promptFilePath = './prompt.txt'; // Pass på at denne pathen er riktig
+const promptFilePath = './prompt.txt';
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 let promptContent = '';
+
+// Konfigurer Redis-klienten
+const client = redis.createClient({
+  url: process.env.REDIS_URL // Dette URL-et er tilgjengelig fra Heroku
+});
+client.connect();
 
 // Middleware
 app.use(cors());
@@ -15,74 +24,62 @@ app.use(express.json());
 
 // Les inn prompt ved oppstart
 try {
-    promptContent = fs.readFileSync(promptFilePath, 'utf8');
-    console.log('Prompt lastet inn fra prompt.txt');
+  promptContent = fs.readFileSync(promptFilePath, 'utf8');
+  console.log('Prompt lastet inn fra prompt.txt');
 } catch (error) {
-    console.error('Kunne ikke lese prompt.txt:', error.message);
-    process.exit(1); // Stopper serveren hvis filen mangler
+  console.error('Kunne ikke lese prompt.txt:', error.message);
+  process.exit(1);
 }
-// OpenAI API-nøkkel (fra .env-filen)
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 // Chatbot API-endepunkt
 app.post('/ask', async (req, res) => {
-    const userInput = req.body.input;
-    if (userInput.trim().toLowerCase() === 'prompt') {
-        console.log("Prompt skal sendes tilbake");  // Bekreft at "prompt" er gjenkjent
-        return res.json({ answer: promptContent });
-    }
-    try {
-        const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-            model: 'gpt-4o',
-            messages: [
-                { 
-                    role: 'system', 
-                    content: `${promptContent}` 
-                },
-                { role: 'user', content: userInput }
-            ],
-            max_tokens: 500,
-            temperature: 0.7,
-        }, {
-            headers: {
-                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-                'Content-Type': 'application/json',
-            }
-        });
+  const userInput = req.body.input;
 
-    // Her formaterer vi svaret for å bruke <ul>, <ol> og <li> for lister
+  // Sjekk om svaret er i Redis-cachen
+  const cachedAnswer = await client.get(userInput);
+  if (cachedAnswer) {
+    console.log("Svar fra cache:");
+    return res.json({ answer: cachedAnswer });
+  }
+
+  try {
+    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      model: 'gpt-4o',
+      messages: [
+        { role: 'system', content: `${promptContent}` },
+        { role: 'user', content: userInput }
+      ],
+      max_tokens: 500,
+      temperature: 0.7,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      }
+    });
+
     let formattedAnswer = response.data.choices[0].message.content.trim();
 
-    // Erstatt linjeskift med <br/>
+    // Formatér svaret med HTML for lister og lenker
     formattedAnswer = formattedAnswer.replace(/\n/g, "<br/>");
-
-    // Erstatt markdown med HTML (f.eks. **bold** blir <strong>bold</strong>)
-    formattedAnswer = formattedAnswer.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // **bold** -> <strong>bold</strong>
-    formattedAnswer = formattedAnswer.replace(/\*(.*?)\*/g, '<em>$1</em>'); // *italic* -> <em>italic</em>
-
-    // For å formatere punktlister og numrerte lister, bruk regex for å fange de
-    // For nummererte lister (1. item)
-    formattedAnswer = formattedAnswer.replace(/^\s*(\d+\.)\s+/gm, '<ol><li>$1 '); 
-    formattedAnswer = formattedAnswer.replace(/\n/g, '</li><li>').replace(/<\/li><li>$/, '</li></ol>'); // Avsluttes med </ol>
-
-    // For punktlister (starte med - eller *)
-    formattedAnswer = formattedAnswer.replace(/^\s*[-\*]\s+/gm, '<ul><li>');
-    formattedAnswer = formattedAnswer.replace(/\n/g, '</li><li>').replace(/<\/li><li>$/, '</li></ul>'); // Avsluttes med </ul>
-
-    // Gjør lenkene klikkbare (regex for å finne URLer og gjøre dem til HTML-lenker)
-    // Gjør lenkene klikkbare (regex for å finne URLer og gjøre dem til HTML-lenker)
+    formattedAnswer = formattedAnswer.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); 
+    formattedAnswer = formattedAnswer.replace(/\*(.*?)\*/g, '<em>$1</em>');
     formattedAnswer = formattedAnswer.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, 
-    '<a href="$2" target="_blank">$1</a>');  // Lag klikkbare lenker fra markdown
+      '<a href="$2" target="_blank">$1</a>');
 
-        // Returner det HTML-formatert svaret
-        res.json({ answer: formattedAnswer });
-    } catch (error) {
-        console.error('Feil med OpenAI API:', error.response ? error.response.data : error.message);
-        res.status(500).send('Internal Server Error');
-    }
+    // Cache svaret i Redis for fremtidige forespørsler (sett i 1 time)
+    await client.set(userInput, formattedAnswer, {
+      EX: 3600, // Expiration time in seconds (1 hour)
+    });
+
+    res.json({ answer: formattedAnswer });
+  } catch (error) {
+    console.error('Feil med OpenAI API:', error.response ? error.response.data : error.message);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 // Start serveren
 app.listen(PORT, () => {
-    console.log(`Serveren kjører på http://localhost:${PORT}`);
+  console.log(`Serveren kjører på http://localhost:${PORT}`);
 });
