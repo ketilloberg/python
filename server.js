@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const promptFilePath = './prompt.txt';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const cors = require('cors');
+
 
 // Middleware for å tillate CORS
 const corsOptions = {
