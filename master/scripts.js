@@ -80,20 +80,23 @@ function appendMessage(message) {
     // Hvis meldingen er en liste, formater den med ul/li
     if (message.includes("\n")) {
         const listItems = message.split('\n').map(item => {
+            // Hvis elementet starter med '-', lag en liste
             if (item.startsWith("-")) {
                 return `<li>${item.replace('-', '').trim()}</li>`;
             } else {
+                // Ellers lag en vanlig paragraf
                 return `<p>${item.trim()}</p>`;
             }
         }).join('');
         
+        // Legg til <ul> rundt listene
         newMessage.innerHTML = `<ul>${listItems}</ul>`;
     } else {
         // Hvis ikke, vis meldingen som vanlig tekst
         newMessage.textContent = message;
     }
+    }
 
     // Legg til den nye meldingen i chatten
     messagesElement.appendChild(newMessage);
     messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll til siste melding
-}
