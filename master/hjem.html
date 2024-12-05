@@ -14,7 +14,7 @@
         <a href="temaer/lese.html">Lese kode</a>
         <a href="temaer/lister.html">Lister</a>
         <a href="temaer/indeks.html">Indeks</a>
-        <a href="temaer/løkker.html">Løkker</a>
+        <a href="temaer/lokker.html">Løkker</a>
         <a href="temaer/funkogmod.html">Funksjoner og moduler</a>
         <a href="temaer/oppgaver.html">Oppgaver</a>
     </div>
@@ -54,7 +54,7 @@
             inputElement.value = "";
 
             // Send spørsmålet til serveren via en POST-forespørsel
-            const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', {
+            const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', { //lagre http://localhost:3000/ask
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

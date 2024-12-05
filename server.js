@@ -41,7 +41,7 @@ app.post('/ask', async (req, res) => {
                 },
                 { role: 'user', content: userInput }
             ],
-            max_tokens: 250,
+            max_tokens: 500,
             temperature: 0.7,
         }, {
             headers: {
@@ -50,14 +50,29 @@ app.post('/ask', async (req, res) => {
             }
         });
 
-        // Her formaterer vi svaret for å bruke <ul>, <ol> og <li> for lister
-        let formattedAnswer = response.data.choices[0].message.content.trim();
+    // Her formaterer vi svaret for å bruke <ul>, <ol> og <li> for lister
+    let formattedAnswer = response.data.choices[0].message.content.trim();
 
-        // Erstatt linjeskift med <br/>
-        formattedAnswer = formattedAnswer.replace(/\n/g, "<br/>");
+    // Erstatt linjeskift med <br/>
+    formattedAnswer = formattedAnswer.replace(/\n/g, "<br/>");
 
-        // For å formatere punktlister og numrerte lister, bruk regex for å fange de
-        formattedAnswer = formattedAnswer.replace(/^\s*\d+\.\s+/gm, '<ol><li>').replace(/\n/g, '</li><li>').replace(/<\/li><li>$/, '</li></ol>');
+    // Erstatt markdown med HTML (f.eks. **bold** blir <strong>bold</strong>)
+    formattedAnswer = formattedAnswer.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // **bold** -> <strong>bold</strong>
+    formattedAnswer = formattedAnswer.replace(/\*(.*?)\*/g, '<em>$1</em>'); // *italic* -> <em>italic</em>
+
+    // For å formatere punktlister og numrerte lister, bruk regex for å fange de
+    // For nummererte lister (1. item)
+    formattedAnswer = formattedAnswer.replace(/^\s*(\d+\.)\s+/gm, '<ol><li>$1 '); 
+    formattedAnswer = formattedAnswer.replace(/\n/g, '</li><li>').replace(/<\/li><li>$/, '</li></ol>'); // Avsluttes med </ol>
+
+    // For punktlister (starte med - eller *)
+    formattedAnswer = formattedAnswer.replace(/^\s*[-\*]\s+/gm, '<ul><li>');
+    formattedAnswer = formattedAnswer.replace(/\n/g, '</li><li>').replace(/<\/li><li>$/, '</li></ul>'); // Avsluttes med </ul>
+
+    // Gjør lenkene klikkbare (regex for å finne URLer og gjøre dem til HTML-lenker)
+    // Gjør lenkene klikkbare (regex for å finne URLer og gjøre dem til HTML-lenker)
+    formattedAnswer = formattedAnswer.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, 
+    '<a href="$2" target="_blank">$1</a>');  // Lag klikkbare lenker fra markdown
 
         // Returner det HTML-formatert svaret
         res.json({ answer: formattedAnswer });

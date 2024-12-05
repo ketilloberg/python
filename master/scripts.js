@@ -5,6 +5,9 @@ window.addEventListener('load', function () {
     if (preloader) {
         preloader.style.display = 'none';
         document.body.classList.add('loaded');
+        // Legg til den nye meldingen i chatten
+        messagesElement.appendChild(newMessage);
+        messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll til siste melding
     }
 
     // Håndter hash i URL-en
@@ -51,7 +54,7 @@ async function sendMessage() {
 
     try {
         // Send forespørsel til serveren
-        const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', {
+        const response = await fetch('https://limitless-waters-02888-6f360deefa8e.herokuapp.com/ask', { //lagre http://localhost:3000/ask
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -76,27 +79,23 @@ async function sendMessage() {
 function appendMessage(message) {
     const messagesElement = document.getElementById("messages");
     const newMessage = document.createElement("div");
+    console.log("Received message:", message);
 
-    // Hvis meldingen er en liste, formater den med ul/li
-    if (message.includes("\n")) {
-        const listItems = message.split('\n').map(item => {
-            // Hvis elementet starter med '-', lag en liste
-            if (item.startsWith("-")) {
-                return `<li>${item.replace('-', '').trim()}</li>`;
-            } else {
-                // Ellers lag en vanlig paragraf
-                return `<p>${item.trim()}</p>`;
-            }
-        }).join('');
-        
-        // Legg til <ul> rundt listene
-        newMessage.innerHTML = `<ul>${listItems}</ul>`;
+    // Hvis meldingen inneholder HTML, vis den direkte
+    if (message.includes("<") && message.includes(">")) {
+        newMessage.innerHTML = message;
     } else {
-        // Hvis ikke, vis meldingen som vanlig tekst
-        newMessage.textContent = message;
-    }
-    }
+        // Hvis meldingen er ren tekst, formater den som HTML
+        let formattedMessage = message;
+        
 
-    // Legg til den nye meldingen i chatten
-    messagesElement.appendChild(newMessage);
-    messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll til siste melding
+        // Erstatt lenker i markdown-format [text](url) med HTML-lenker
+        formattedMessage = formattedMessage.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+        // Behandle markdown-formatert tekst som HTML
+        newMessage.innerHTML = formattedMessage;
+    }
+        // Legg til den nye meldingen i chatten
+        messagesElement.appendChild(newMessage);
+        messagesElement.scrollTop = messagesElement.scrollHeight; // Scroll til siste melding
+    }
