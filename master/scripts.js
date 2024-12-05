@@ -29,10 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Hent tekstfeltet for brukerinput
     const userInputField = document.getElementById("user-input");
     if (userInputField) {
-        // Lytt etter Enter-tasten
-        userInputField.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault(); // Forhindre standard oppførsel
+        // Lytt etter tastetrykk
+        userInputField.addEventListener("keydown", function (event) {
+            // Hvis Enter trykkes uten Shift, send meldingen
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault(); // Forhindre linjeskift
                 sendMessage(); // Kall sendMessage-funksjonen
             }
         });

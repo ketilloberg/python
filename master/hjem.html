@@ -19,23 +19,22 @@
         <a href="temaer/oppgaver.html">Oppgaver</a>
     </div>
     <div class="first-container container">
-        <h1>Velkommen til Python-assistenten!</h1>
+        <h1>Velkommen til Python-hjelperen!</h1>
         
         <!-- Linkene til sidene -->
-        <a href="hjem.html"></a> <br>
-        <a href="temaer/intro.html">Introduksjon</a> <br>
-        <a href="temaer/lese.html">Lese kode</a> <br>
-        <a href="temaer/lister.html">Lister</a> <br>
-        <a href="temaer/indeks.html">Indeks</a> <br>
-        <a href="temaer/løkker.html">Løkker</a> <br>
-        <a href="temaer/funkogmod.html">Funksjoner og moduler</a> <br>
+        <p> Denne siden er laget for å hjelpe deg med å lære Python på en enkel og forståelig måte. </p>
+        <p>Under finner du en Python-hjelper som er utviklet for å hjelpe deg med å planlegge koden, og forstå koding.</p>
+        <p>Du kan for eksempel skrive inn et problem du jobber med, og så kan Python-hjelperen vise deg hvor du kan finne nyttig informasjon.</p>
+        <p>Python-hjelperen er i utvikling, så dersom du opplever den for vrien og vrang, </p>
+        <p>så send meg gjerne en mail og forklar hva som er problemet. <e-post>ketilmyhr@gmail.com</e-post></p>
+        <p>Lykke til med kodingen!</p>
 
 
     </div>
             <!-- Chatbot-grensesnitt -->
             <div class="chatbox">
                 <div class="messages" id="messages"></div>
-                <input type="text" id="user-input" placeholder="Skriv noe...">
+                <textarea id="user-input" placeholder="Skriv noe..." rows="3"></textarea>
                 <button onclick="sendMessage()">Send</button>
             </div>
     <script src="scripts.js"></script>
@@ -72,10 +71,10 @@
             const data = await response.json();
 
             // Vis AI-svaret
-            appendMessage("AI: " + data.answer);
+            appendMessage("Python-hjelperen: " + data.answer);
         } catch (error) {
             console.error("Error:", error);
-            appendMessage("AI: Det oppsto en feil, prøv igjen senere.");
+            appendMessage("Python-hjelperen: Beklager, men det oppsto en feil, prøv igjen senere.");
         }
     }
 
