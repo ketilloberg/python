@@ -10,11 +10,19 @@ const PORT = process.env.PORT || 3000;
 const promptFilePath = './prompt.txt';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-// Middleware for å tillate CORS
+// Konfigurer Redis-klienten
+const client = redis.createClient({
+  url: process.env.REDIS_URL // Dette URL-et er tilgjengelig fra Heroku
+});
+client.connect();
+
+// Middleware for å håndtere CORS
 const corsOptions = {
-    origin: '*', // Tillater alle opprinnelser. For spesifikke domener, sett en liste av URL-er
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Tillater spesifikke HTTP-metoder
-    allowedHeaders: ['Content-Type', 'Authorization'] // Tillater spesifikke headers
+    origin: '*', // Tillater alle domener. Sett til spesifikke URL-er for økt sikkerhet
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Tillater spesifikke HTTP-metoder
+    allowedHeaders: ['Content-Type', 'Authorization'], // Tillater spesifikke headers
+    preflightContinue: true, // Fortsetter preflight-sjekking uten å avslutte den
+    optionsSuccessStatus: 204 // No content på successful OPTIONS preflight
 };
 
 // Bruk CORS middleware før ruter
@@ -22,23 +30,17 @@ app.use(cors(corsOptions));
 
 let promptContent = '';
 
-// Konfigurer Redis-klienten
-const client = redis.createClient({
-  url: process.env.REDIS_URL // Dette URL-et er tilgjengelig fra Heroku
-});
-client.connect();
-
-// Middleware
-app.use(express.json());  // Bruker express.json() for å håndtere JSON-forespørsler
-
 // Les inn prompt ved oppstart
 try {
   promptContent = fs.readFileSync(promptFilePath, 'utf8');
   console.log('Prompt lastet inn fra prompt.txt');
 } catch (error) {
   console.error('Kunne ikke lese prompt.txt:', error.message);
-  process.exit(1); // Stopper serveren hvis filen mangler
+  process.exit(1);
 }
+
+// Middleware
+app.use(express.json());
 
 // Chatbot API-endepunkt
 app.post('/ask', async (req, res) => {
