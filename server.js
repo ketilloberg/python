@@ -10,11 +10,18 @@ const PORT = process.env.PORT || 3000;
 const promptFilePath = './prompt.txt';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-// Konfigurer Redis-klienten
+let promptContent = '';
+
+// Konfigurer Redis-klienten og deaktiver SSL-verifisering
 const client = redis.createClient({
-  url: process.env.REDIS_URL // Dette URL-et er tilgjengelig fra Heroku
+  url: process.env.REDIS_URL, // Dette URL-et er tilgjengelig fra Heroku
+  socket: {
+    tls: true,  // Bruk SSL/TLS-forbindelse
+    rejectUnauthorized: false // Deaktiver SSL-verifisering for selv-signerte sertifikater
+  }
 });
-client.connect();
+
+client.connect();  // Koble til Redis
 
 // Middleware for å håndtere CORS
 const corsOptions = {
@@ -28,8 +35,6 @@ const corsOptions = {
 
 // Bruk CORS middleware før ruter
 app.use(cors(corsOptions));
-
-let promptContent = '';
 
 // Les inn prompt ved oppstart
 try {
