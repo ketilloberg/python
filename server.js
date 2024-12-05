@@ -4,7 +4,7 @@ const cors = require('cors');
 const fs = require('fs');
 const redis = require('redis');
 require('dotenv').config(); 
-
+const rateLimit = require('express-rate-limit'); // Importer express-rate-limit
 const app = express();
 const PORT = process.env.PORT || 3000;
 const promptFilePath = './prompt.txt';
@@ -35,7 +35,17 @@ const corsOptions = {
 
 // Bruk CORS middleware før ruter
 app.use(cors(corsOptions));
+// Konfigurer rate limiting (1 minutts vindu, maks 60 forespørsler per IP)
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minutt
+    max: 10, // Maksimalt antall forespørsler per IP i tidsvinduet
+    message: "For mange forespørsler fra denne IP-en. Vennligst vent et øyeblikk.",
+    standardHeaders: true, // Returner informasjon i `RateLimit-*` headers
+    legacyHeaders: false, // Deaktiver `X-RateLimit-*` headers (foreldet)
+});
 
+// Bruk rate limiter som middleware før ruter
+app.use(limiter);
 // Les inn prompt ved oppstart
 try {
   promptContent = fs.readFileSync(promptFilePath, 'utf8');
