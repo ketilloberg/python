@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 3000;
 const promptFilePath = './prompt.txt';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-
 // Middleware for å tillate CORS
 const corsOptions = {
     origin: '*', // Tillater alle opprinnelser. For spesifikke domener, sett en liste av URL-er
@@ -21,7 +20,6 @@ const corsOptions = {
 // Bruk CORS middleware før ruter
 app.use(cors(corsOptions));
 
-
 let promptContent = '';
 
 // Konfigurer Redis-klienten
@@ -31,8 +29,7 @@ const client = redis.createClient({
 client.connect();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(express.json());  // Bruker express.json() for å håndtere JSON-forespørsler
 
 // Les inn prompt ved oppstart
 try {
@@ -40,7 +37,7 @@ try {
   console.log('Prompt lastet inn fra prompt.txt');
 } catch (error) {
   console.error('Kunne ikke lese prompt.txt:', error.message);
-  process.exit(1);
+  process.exit(1); // Stopper serveren hvis filen mangler
 }
 
 // Chatbot API-endepunkt
